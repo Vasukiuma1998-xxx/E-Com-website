@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import { toast } from 'react-toastify';
 
 
 
@@ -51,6 +52,7 @@ const ShopContextProvider=(props)=>{
                 .then((response)=>response.json())
                 .then((data)=>console.log(data));
 
+                toast.success("Added to cart Succesfully")
           
         }
     }
