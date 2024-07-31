@@ -13,13 +13,17 @@ const getDefaultCart = () => {
 
 const ShopContextProvider = (props) => {
     const [all_product, setAll_Product] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [isUserSignedIn, setIsUserSignedIn] = useState(false);
 
     useEffect(() => {
         fetch('https://e-com-website-backend.onrender.com/allproducts')
             .then((response) => response.json())
-            .then((data) => setAll_Product(data));
+            .then((data) => {setAll_Product(data);
+                setFilteredProducts(data);
+
+     } );
 
         const authToken = localStorage.getItem('auth-token');
         if (authToken) {
@@ -95,14 +99,25 @@ const ShopContextProvider = (props) => {
         }
         return totalItem;
     }
-
+    const searchProducts = (query) => {
+        if (query) {
+            const results = all_product.filter(product =>
+                product.name.toLowerCase().includes(query.toLowerCase())
+            );
+            setFilteredProducts(results);
+        } else {
+            setFilteredProducts(all_product);
+        }
+    }
     const contextvalue = {
         getTotalCartAmount,
         getTotalCartItems,
         all_product,
+        filteredProducts,
         cartItems,
         addToCart,
         removeFromCart,
+        searchProducts,
         isUserSignedIn
     };
 

@@ -7,8 +7,13 @@ import Item from "../Components/Item/Item";
 const ShopCategory = (props) => {
     const { all_product } = useContext(ShopContext);
     const [sortOrder, setSortOrder] = useState('asc'); // State to manage sorting order
-    const [sortedProducts, setSortedProducts] = useState(all_product); // State to manage sorted products
-
+    // const [sortedProducts, setSortedProducts] = useState(all_product); // State to manage sorted products
+    const [sortedProducts, setSortedProducts] = useState(filteredProducts); // State to manage sorted products
+   
+    useEffect(() => {
+        setSortedProducts(filteredProducts);
+    }, [filteredProducts]);
+   
     // Function to handle sorting
     const handleSort = () => {
         const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
