@@ -4,6 +4,7 @@ import logo from "../Assets/logo.png";
 import cart_icon from "../Assets/cart_icon.png"
 import { Link } from "react-router-dom";
 import { ShopContext } from "../../Context/ShopContext";
+import SearchBar from "../SearchBar/SearchBar";
 import nav_dropdown from '../Assets/nav_dropdown.png'
 const Navbar = () => {
 
@@ -29,6 +30,7 @@ const Navbar = () => {
                 <li onClick={()=>{setMenu("womens")}}><Link style={{textDecoration:'none'}}to='/womens'>Women</Link>{menu==="womens"?<hr/>:<></>}</li>
                 <li onClick={()=>{setMenu("kids")}}><Link style={{textDecoration:'none'}}to='/kids'>kids</Link>{menu==="kids"?<hr/>:<></>}</li>
             </ul>
+            <SearchBar />
             <div className="nav-login-cart">
                 {localStorage.getItem('auth-token')
                 ?<button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace('/')}}>Logout</button>
