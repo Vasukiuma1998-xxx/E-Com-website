@@ -20,7 +20,8 @@ const ShopContextProvider = (props) => {
     useEffect(() => {
         fetch('https://e-com-website-backend.onrender.com/allproducts')
             .then((response) => response.json())
-            .then((data) => {setAll_Product(data);
+            .then((data) => {
+                setAll_Product(data);
                 setFilteredProducts(data);
 
      } );
