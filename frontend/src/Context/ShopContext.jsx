@@ -1,81 +1,80 @@
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 
+export const ShopContext = createContext(null);
 
-
-export const ShopContext=createContext(null)
-
-const getDefaultCart=()=>{
-    let cart={};
-    for(let index=0;index<300+1;index++){
-        cart[index]=0;
+const getDefaultCart = () => {
+    let cart = {};
+    for (let index = 0; index < 300 + 1; index++) {
+        cart[index] = 0;
     }
     return cart;
 }
 
-const ShopContextProvider=(props)=>{
+const ShopContextProvider = (props) => {
+    const [all_product, setAll_Product] = useState([]);
+    const [cartItems, setCartItems] = useState(getDefaultCart());
+    const [isUserSignedIn, setIsUserSignedIn] = useState(false);
 
-    const [all_product,setAll_Product]=useState([]);
-    const [cartItems,setCartItems]=useState(getDefaultCart());
-
-    useEffect(()=>{
+    useEffect(() => {
         fetch('https://e-com-website-backend.onrender.com/allproducts')
-        .then((response)=>response.json())
-        .then((data)=>setAll_Product(data))
+            .then((response) => response.json())
+            .then((data) => setAll_Product(data));
 
-        if(localStorage.getItem('auth-token')){
-            fetch('https://e-com-website-backend.onrender.com/getcart',{
-                method:'POST',
-                headers:{
-                    Accept:'application/form-data',
-                    'auth-token':`${localStorage.getItem('auth-token')}`,
-                    'Content-Type':'application/json',
+        const authToken = localStorage.getItem('auth-token');
+        if (authToken) {
+            setIsUserSignedIn(true);
+
+            fetch('https://e-com-website-backend.onrender.com/getcart', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/form-data',
+                    'auth-token': authToken,
+                    'Content-Type': 'application/json',
                 },
-                body:"",
-            }).then((response)=>response.json())
-            .then((data)=>setCartItems(data));
-        }
-    },[])
-    
-    const addToCart=(itemId)=>{
-        setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
-        if(localStorage.getItem('auth-token')){
-            fetch('https://e-com-website-backend.onrender.com/addtocart',{
-                method:'POST',
-                headers:{
-                    Accept:'application/form-data',
-                    'auth-token':`${localStorage.getItem('auth-token')}`,
-                    'Content-Type':'application/json',
-                },
-                body:JSON.stringify({"itemId":itemId}),
+                body: "",
             })
-                .then((response)=>response.json())
-                .then((data)=>console.log(data));
+                .then((response) => response.json())
+                .then((data) => setCartItems(data));
+        }
+    }, []);
 
-                toast.success("Added to cart Succesfully")
-          
+    const addToCart = (itemId) => {
+        setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+        if (isUserSignedIn) {
+            fetch('https://e-com-website-backend.onrender.com/addtocart', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/form-data',
+                    'auth-token': localStorage.getItem('auth-token'),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ "itemId": itemId }),
+            })
+                .then((response) => response.json())
+                .then((data) => console.log(data));
+
+            toast.success("Added to cart Successfully");
         }
     }
-    const removeFromCart=(itemId)=>{
-        setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))
-        if(localStorage.getItem('auth-token'))
-        {
-            fetch('https://e-com-website-backend.onrender.com/removefromcart',{
-                method:'POST',
-                headers:{
-                    Accept:'application/form-data',
-                    'auth-token':`${localStorage.getItem('auth-token')}`,
-                    'Content-Type':'application/json',
-                },
-                body:JSON.stringify({"itemId":itemId}),
-            })
-                .then((response)=>response.json())
-                .then((data)=>console.log(data));
 
-          
+    const removeFromCart = (itemId) => {
+        setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+        if (isUserSignedIn) {
+            fetch('https://e-com-website-backend.onrender.com/removefromcart', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/form-data',
+                    'auth-token': localStorage.getItem('auth-token'),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ "itemId": itemId }),
+            })
+                .then((response) => response.json())
+                .then((data) => console.log(data));
         }
     }
-    
+
     const getTotalCartAmount = () => {
         let totalAmount = 0;
         for (const item in cartItems) {
@@ -86,25 +85,32 @@ const ShopContextProvider=(props)=>{
         }
         return totalAmount;
     }
-    const getTotalCartItems=()=>{
-        let totalItem=0;
-        for (const item in cartItems){
-            if(cartItems[item]>0)
-            {
-                totalItem+=cartItems[item];
+
+    const getTotalCartItems = () => {
+        let totalItem = 0;
+        for (const item in cartItems) {
+            if (cartItems[item] > 0) {
+                totalItem += cartItems[item];
             }
         }
         return totalItem;
     }
 
-    
-    const contextvalue={getTotalCartAmount,getTotalCartItems,all_product,cartItems,addToCart,removeFromCart};
+    const contextvalue = {
+        getTotalCartAmount,
+        getTotalCartItems,
+        all_product,
+        cartItems,
+        addToCart,
+        removeFromCart,
+        isUserSignedIn
+    };
 
-    return(
+    return (
         <ShopContext.Provider value={contextvalue}>
             {props.children}
         </ShopContext.Provider>
-    )
+    );
 }
 
-export default ShopContextProvider
+export default ShopContextProvider;

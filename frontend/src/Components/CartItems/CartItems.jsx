@@ -2,10 +2,19 @@ import React, { useContext } from "react";
 import './CartItems.css'
 import { ShopContext } from '../../Context/ShopContext'
 import remove_icon from '../Assets/cart_cross_icon.png'
+import { toast } from "react-toastify";
 
 const CartItems = () => {
-    const { getTotalCartAmount,all_product, cartItems, removeFromCart } = useContext(ShopContext);
+    const { getTotalCartAmount,all_product, cartItems, removeFromCart, isUserSignedIn } = useContext(ShopContext);
 
+    const handleCheckout =()=>{
+        if(isUserSignedIn){
+            toast.success("proceeding to checkout");
+        }
+        else{
+            toast.error("Please sign in to proceed to checkout.");
+        }
+    }
     return (
         <div className="cartitems">
             <div className="cartitems-format-main">
@@ -54,7 +63,7 @@ const CartItems = () => {
                             <p>&#x20b9;{getTotalCartAmount()}</p>
                         </div>
                     </div>
-                    <button>PROCEED TO CHECKOUT</button>
+                    <button onClick={handleCheckout}>PROCEED TO CHECKOUT</button>
                 </div>
                 <div className="cartitems-promocode">
                     <p>If you have a promo code, Enter it here</p>
