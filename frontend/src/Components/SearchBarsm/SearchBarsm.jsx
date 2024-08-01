@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { ShopContext } from '../../Context/ShopContext';
-import './SearchBar.css';
+import './SearchBarsm.css';
 import '@fortawesome/fontawesome-free/css/all.css'; // Import Font Awesome CSS
 
-const SearchBar = () => {
+const SearchBarsm = () => {
   const [query, setQuery] = useState('');
   const { searchProducts } = useContext(ShopContext);
 
@@ -20,7 +20,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="search-bar">
+    <div className="search-barsm">
       <input 
         type="text" 
         value={query} 
@@ -34,4 +34,4 @@ const SearchBar = () => {
   );
 };
 
-export default SearchBar;
+export default SearchBarsm;

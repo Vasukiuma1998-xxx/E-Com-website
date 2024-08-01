@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { ShopContext } from "../../Context/ShopContext";
 import SearchBar from "../SearchBar/SearchBar";
 import nav_dropdown from '../Assets/nav_dropdown.png'
+
 const Navbar = () => {
 
     const [menu,setMenu]=useState("shop")
@@ -17,6 +18,7 @@ const Navbar = () => {
         e.target.classList.toggle('open');
     }
     return (
+        <>
         <div className="navbar">
             <div className="nav-logo">
                 <img src={logo} alt="logo" />
@@ -40,6 +42,8 @@ const Navbar = () => {
                 <div className="nav-cart-count">{getTotalCartItems()}</div>
             </div>
         </div>
+       
+        </>
     )
 }
 export default Navbar

@@ -3,6 +3,7 @@ import './CSS/ShopCategory.css';
 import { ShopContext } from "../Context/ShopContext";
 import dropdown_icon from '../Components/Assets/dropdown_icon.png';
 import Item from "../Components/Item/Item";
+import SearchBarsm from "../Components/SearchBarsm/SearchBarsm";
 
 const ShopCategory = (props) => {
     const { filteredProducts } = useContext(ShopContext);
@@ -32,6 +33,8 @@ const ShopCategory = (props) => {
     const filteredByCategory = sortedProducts.filter(item => item.category === props.category);
 
     return (
+        <>
+        <SearchBarsm/>
         <div className="shop-category">
             <img className='shopcategory-banner' src={props.banner} alt="" />
             <div className="shopcategory-indexSort">
@@ -51,6 +54,7 @@ const ShopCategory = (props) => {
                 Explore More
             </div>
         </div>
+        </>
     );
 };
 
