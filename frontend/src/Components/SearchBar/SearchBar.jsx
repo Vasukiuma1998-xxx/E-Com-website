@@ -5,15 +5,19 @@ import './SearchBar.css';
 const SearchBar = () => {
   const [query, setQuery] = useState('');
   const { searchProducts } = useContext(ShopContext);
+  console.log('searchProducts:', searchProducts); // Add this line to debug
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
   };
 
   const handleSearch = () => {
-    searchProducts(query);
+    if (typeof searchProducts === 'function') {
+      searchProducts(query);
+    } else {
+      console.error('searchProducts is not a function:', searchProducts);
+    }
   };
-
   return (
     <div className="search-bar">
       <input 

@@ -24,7 +24,8 @@ const ShopContextProvider = (props) => {
                 setAll_Product(data);
                 setFilteredProducts(data);
 
-     } );
+     } )
+     .catch(error => console.error('Error fetching products:', error));
 
         const authToken = localStorage.getItem('auth-token');
         if (authToken) {
@@ -40,7 +41,8 @@ const ShopContextProvider = (props) => {
                 body: "",
             })
                 .then((response) => response.json())
-                .then((data) => setCartItems(data));
+                .then((data) => setCartItems(data))
+                .catch(error => console.error('Error fetching cart:', error));
         }
     }, []);
 
